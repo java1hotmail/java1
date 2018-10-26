@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"></meta>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<link rel="icon" type="image/vnd.microsoft.icon"
+	href="../../../resources/images/favicon.ico"
+	th:href="@{/resources/images/favicon.ico}" />
+<link rel="shortcut icon" type="image/vnd.microsoft.icon"
+	href="../../../resources/images/favicon.ico"
+	th:href="@{/resources/images/favicon.ico}" />
+<title th:text="#{title}">AT&amp;T CSO Reports - CMS</title>
+
+<link href="../../../resources/css/bootstrap.min.css" rel="stylesheet"
+	th:href="@{/resources/css/bootstrap.min.css}" />
+<link href="../../../resources/css/bootstrap-glyphicons.css"
+	th:href="@{/resources/css/bootstrap-glyphicons.css}" rel="stylesheet" />
+<link rel="stylesheet" type="text/css"
+	href="../../../resources/css/custom.css"
+	th:href="@{/resources/css/custom.css}" />
+<link rel="stylesheet" type="text/css"
+	href="../../../resources/css/checkbox.css"
+	th:href="@{/resources/css/checkbox.css}" />
+<link href="../../resources/css/jquery.mobile-1.4.3.min.css"
+	th:href="@{/resources/css/jquery.mobile-1.4.3.min.css}"
+	rel="stylesheet" />
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	
+<script src="../../../resources/js/jquery-1.11.0.min.js"
+	th:src="@{/resources/js/jquery-1.11.0.min.js}"></script>
+<script src="../../../resources/js/js.cookie.js"
+	th:src="@{/resources/js/js.cookie.js}"></script>
+<script src="../../../resources/js/bootstrap.min.js"
+	th:src="@{/resources/js/bootstrap.min.js}"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<style type="text/css">
+.clickable {
+	cursor: pointer;
+}
+
+td img {
+	max-width: 15%;
+	height: auto;
+}
+
+.centered {
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.righted {
+	text-align: right;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.ui-dialog-title{
+    font-size: 100% !important;
+    color: black;
+    font-weight: bold;
+    width: 400px,
+}
+.ui-dialog .ui-dialog-content {
+    font-size: 90%;
+    background: #357ebd;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    overflow: auto;
+}
+tbody-scroll {
+  height: 200px;
+  display: block;
+  overflow-y: scroll;
+}
+</style>
+
+<!-- deviceinfo.html -->
+</head>
+
+<body>
+
+<div class="container">
+	<div class="modal fade" id="flash-message">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">User Administration</h4>
+				</div>
+				<!-- modal-header -->
+				<div class="modal-body">
+					<p id="flash-message-content" class="text-center">Flash Message</p>
+				</div>
+				<!-- modal-body -->
+				<div class="modal-footer">
+					<a href="#" data-dismiss="modal" class="btn btn-primary">Close</a>
+				</div>
+				<!-- modal-footer -->
+			</div>
+			<!-- modal-content -->
+		</div>
+		<!-- modal-dialog -->
+	</div>
+
+	<div class="container">
+		<nav class="navbar navbar-default" role="navigation"
+			th:replace="fragments/navbar :: navbar">
+
+			<div class="row">
+				<div class="col-md-5">
+					<img src="../../../resources/images/title.png"
+						th:src="@{/resources/images/title.png}" />
+				</div>
+
+				<div class="col-md-7">
+
+					<ul class="nav navbar-nav navbar-right">
+
+						<li><a href="index.html" th:href="@{/}"
+							th:text="#{menu.home.title}">Home</a></li>
+						<li><a href="reports.html" th:href="@{/reports}"
+							th:text="#{menu.reports.title}">Reports</a></li>
+						<li><a href="articles.html" th:href="@{/articles}"
+							th:text="#{menu.articles.title}">Articles</a></li>
+						<li th:if="${isAdmin}"><a href="metrics.html"
+							th:href="@{/metrics}" th:text="#{menu.metrics.title}">Metrics</a></li>
+						<li class="dropdown" th:if="${isAdmin}"><a href="#"
+							th:inline="text" class="dropdown-toggle" data-toggle="dropdown">[[#{menu.system.title}]]
+								<b class="caret"></b>
+						</a>
+							<ul class="dropdown-menu">
+								<li><a href="users.html" th:href="@{/users/admin}"
+									th:text="#{menu.admin.title}">Users</a></li>
+								<li><a href="users.html" th:href="@{/settings/roles}"
+									th:text="#{menu.roles.title}">Roles</a></li>
+								<li><a href="users.html" th:href="@{/groups/admin}"
+									th:text="#{menu.groups.title}">Groups</a></li>
+								<li><a href="users.html"
+									th:href="@{/settings/article/threatSeverity}"
+									th:text="#{menu.articles.title}">Articles</a></li>
+							</ul></li>
+						<li><a href="#" th:text="|Hello ${firstname}|">Hello
+								Guest </a></li>
+					</ul>
+				</div>
+				<!-- .col -->
+			</div>
+			<!-- .row -->
+
+		</nav>
+
+		<ol class="breadcrumb">
+			<li><a href="index.html" th:href="@{/}"
+				th:text="#{menu.home.title}">Home</a></li>
+			<li th:text="#{menu.system.title}">Settings</li>
+			<li class="active"><a href="admin.html"
+				th:href="@{/users/admin}" th:text="#{menu.admin.title}">Admin</a></li>
+		</ol>
+
+		<h3>Device Information</h3>
+		<div class="row">
+			<div class="table-responsive" style="overflow: auto;  height:400px;">
+				<table style="table-layout: fixed; width: 95%; font-size: 14px;"
+					class="table table-hover">
+					<thead>
+						<tr>
+							<th style="width: 1%;"></th>
+							<th style="width: 10%;">ATTUID</th>
+							<th class="centered" style="width: 20%;">Name</th>
+							<th style="width: 20%;">Device Name</th>
+							<th style="width: 15%;">App Version</th>
+							<th style="width: 10%;">App VID</th>
+							<th class="centered" nowrap style="width: 20%;">Date</th>
+							<th style="width: 4%;"></th>
+						</tr>
+					</thead> 
+					<tbody class="tbody-scroll" th:remove="all-but-first">
+						<th:block th:each="device : ${devices}">
+							<tr><td></td>
+								<td th:text="${device.user.attuid}">123</td>
+								<td class="centered" th:text="${device.user.firstname} + ' ' + ${device.user.lastname}">ABC1111</td>
+								<td th:text="${device.deviceName}">my-iPhone</td>
+								<td th:text="${device.appVersion != null} ? ${device.appVersion.version} : ''">appv</td>
+								<td th:text="${device.appVersion != null} ? ${device.appVersion.appVersionId} : ''">appvid</td>
+								<td class="centered" style="word-wrap: break-word; width: 20%;"
+									th:text="${device.dateTime}">Date</td>
+								<td><label class="ckcontainer"> <input
+										type="checkbox" class="devBox" name="devBox"
+										th:value="${device.deviceType.deviceTypeId}+ '##'+ ${device.deviceToken}" />
+										<span class="checkmark"></span>
+								</label>
+							</tr>
+				
+				</tbody>
+				<div id="dialog"  title="Device Notification"></div>
+				</table><!-- .table-responsive -->
+				</div>
+				<table>
+				<tr>
+  				
+				</tr>
+				
+				<tr>
+				<td/>
+				<td colspan="5"><textarea cols="100" rows="2" name="text" id="msgText"
+					placeholder="Enter Message (1-150 Characters)"></textarea>
+				<td/>		
+				<td> <button id="btn-checkAll" class="btn btn-primary">Select/Deselect All</button> </td>
+				</tr><tr>
+				<td/>
+				<td colspan="2">
+				<button  class="btn btn-success"
+						id="btn-sendmsglist">Send Message</button>
+				</td>
+				<td colspan="4">
+				<td colspan="2"><button class="btn btn-danger"
+						id="btn-delete">Remove Token</button>
+				</td>
+				
+				</tr>
+			</table>
+
+			
+			
+
+</div>
+
+		</div>
+		<!-- .row -->
+		<div th:replace="fragments/footer :: footer">Footer goes here!</div>
+	</div>
+	<!-- .container -->
+
+	<script type="text/javascript"
+		src="../../../resources/js/knockout-3.0.0.js"
+		th:src="@{/resources/js/knockout-3.0.0.js}"></script>
+	<script type="text/javascript"
+		src="../../../resources/js/ko.extensions.js"
+		th:src="@{/resources/js/ko.extensions.js}"></script>
+
+	<script type="text/javascript" src="../../../resources/js/devices.js"
+		th:src="@{/resources/js/devices.js}"></script>
+
+
+</body>
+
+
+</html>
